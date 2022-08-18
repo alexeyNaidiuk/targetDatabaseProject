@@ -1,45 +1,49 @@
 import uvicorn
 from fastapi import FastAPI, Response
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 
-from database import select_from_database_with_limit, update_column, get_amount_of_available_ems
+from database import update_column, select_from_targets
 
-PORT = 8000
+PORT = 8000  # todo make as an environmental variable
 
-HOST = '10.107.4.13'
+HOST = '10.107.4.13'  # todo make as an environmental variable
+HOST = 'localhost'  # todo make as an environmental variable
 
 app = FastAPI()
 
 
+class Target(BaseModel):
+    email: str
+    site: str
+
+
 @app.get('/')
 def root_page():
-    return RedirectResponse("/listofdatabases")
+    return RedirectResponse("/databases")
 
 
-@app.get('/listofdatabases')
+@app.get('/databases')
 async def get_list_of_databases():
     return {
-        'targets': {
-            'test': f'http://{HOST}:{PORT}/targets/test',
-            'available_emails': await get_amount_of_available_ems('test.db')
+        'databases': {
+            'test database url': f'http://{HOST}:{PORT}/databases/test.db',
+            # 'targets_available': await get_amount_of_available_ems('test.db')
         }
     }
 
 
-@app.get('/targets/{db_name}')
-async def get_from_targets_db(db_name, limit=1):
+@app.get('/databases/{db_name}/targets')
+async def get_targets(db_name, limit: int = 1):
     if db_name == 'favicon.ico':
         return None
-    ems = await get_amount_of_available_ems(db_name+'.db')
-    if ems == 0:
-        return None
-    emails = await select_from_database_with_limit(db_name + '.db', limit)
+    emails = await select_from_targets(db_name, limit)
     return Response(content='\n'.join(emails))
 
 
-@app.put('/targets/{db_name}')
-async def update_targets_row(db_name, target: dict):
-    await update_column(db_name + '.db', target)
+@app.patch('/databases/{db_name}/targets')
+async def update_target(db_name: str, target: Target):
+    await update_column(db_name, target)
     return Response(content=f'Updated!')
 
 
