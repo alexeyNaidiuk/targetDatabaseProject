@@ -62,7 +62,7 @@ async def amount_of_available_ems(db_name):
 async def update_column(db_name, target):
     with sqlite3.connect(db_name) as connection:
         cursor = connection.cursor()
-        cursor.execute(f'update emails set site = ? where email = ?', (target['site'], target["email"]))
+        cursor.execute(f'update emails set site = ? where email = ?', (target.site, target.email))
         connection.commit()
 
 
