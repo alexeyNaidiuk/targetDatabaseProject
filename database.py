@@ -73,40 +73,39 @@ async def archive_emails(db_name):
         con.commit()
 
 
-async def select_from_targets(db_name, limit) -> list:
+async def select_from_targets(db_name) -> str:
     if await amount_of_available_ems(db_name) == 0:
         await archive_emails(db_name)
         await delete_sites_from_emails(db_name)
-    return await select_from_database_with_limit(db_name, limit)
+    target = await select_from_database_with_limit(db_name)
+    await update_column(db_name, {'email': target, 'site': 'busy'})
+    return target
 
 
-async def select_from_database_with_limit(db_name, limit) -> list:
+async def select_from_database_with_limit(db_name) -> str:
     with sqlite3.connect(db_name) as connection:
         cursor = connection.cursor()
-        cursor.execute(f'select email from emails where site is NULL limit ?', (limit,))
-        if int(limit) == 1:
-            result = cursor.fetchone()
-        else:
-            result = [i[0] for i in cursor.fetchall()]
+        cursor.execute(f'select email from emails where site is NULL limit 1')
+        result = cursor.fetchone()[0]
         return result
 
 
-async def amount_of_available_ems(db_name):
+async def amount_of_available_ems(db_name) -> int:
     with sqlite3.connect(db_name) as con:
         cur = con.cursor()
         cur.execute('select count(email) from emails where site is NULL')
         return cur.fetchone()[0]
 
 
-async def update_column(db_name, target):
+async def update_column(db_name, target: dict):
     with sqlite3.connect(db_name) as connection:
         cursor = connection.cursor()
-        cursor.execute(f'update emails set site = ? where email = ?', (target.site, target.email))
+        cursor.execute(f'update emails set site = ? where email = ?', (target['site'], target['email']))
         connection.commit()
 
 
 async def main():
-    await create_db('turk.db')
+    await select_from_targets('turk.db')
 
 
 if __name__ == '__main__':

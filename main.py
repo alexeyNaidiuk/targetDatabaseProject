@@ -1,19 +1,12 @@
-from typing import Optional
-
 import uvicorn
 from fastapi import FastAPI, Response, Body, status
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel
 
-from database import update_column, select_from_targets, amount_of_available_ems, get_index_page
 import config
+from database import update_column, select_from_targets, amount_of_available_ems, get_index_page
+from models import Target
 
 app = FastAPI()
-
-
-class Target(BaseModel):
-    email: str
-    site: Optional[str] = None
 
 
 @app.get('/')
@@ -23,7 +16,7 @@ def root_page():
 
 @app.get('/dbs')
 async def get_databases():  # todo убрать это куда подальше
-    return get_index_page()
+    return await get_index_page()
 
 
 @app.get('/link/{geo}')  # todo return shortlink
@@ -47,12 +40,11 @@ async def get_text(text_name: str, spinned: bool = False):
 
 
 @app.get('/dbs/targets/{db_name}')
-async def get_targets(db_name, limit: int = 1):
+async def get_target(db_name):
     if db_name == 'favicon.ico':
         return None
-    emails = await select_from_targets(db_name, limit)
-    print(emails)
-    return Response(content='\n'.join(emails))
+    target = await select_from_targets(db_name)
+    return Response(content=target)
 
 
 @app.get('/dbs/targets/{db_name}/available')
@@ -63,7 +55,7 @@ async def get_targets(db_name: str):
 
 @app.put('/dbs/targets/{db_name}')
 async def update_target(db_name: str, target: Target):
-    await update_column(db_name, target)
+    await update_column(db_name, target.dict())
     return Response(content=target.json(), status_code=status.HTTP_202_ACCEPTED)
 
 
