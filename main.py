@@ -3,7 +3,8 @@ from fastapi import FastAPI, Response, Body, status
 from fastapi.responses import RedirectResponse
 
 import config
-from database import update_column, select_from_targets, amount_of_available_ems, get_index_page
+from database import update_column, select_from_targets, amount_of_available_ems, get_index_page, \
+    west_proxies
 from models import Target
 
 app = FastAPI()
@@ -15,7 +16,7 @@ def root_page():
 
 
 @app.get('/dbs')
-async def get_databases():  # todo убрать это куда подальше
+async def get_databases():
     return await get_index_page()
 
 
@@ -29,9 +30,10 @@ async def add_link(body: dict = Body(...)):
     return None
 
 
-@app.get('/dbs/proxies/{proxy_name}')  # todo next from cycle
-async def get_proxy(proxy_name: str):
-    return None
+@app.get('/dbs/proxies/west_proxy')  # todo next from cycle
+async def get_west_proxy():
+    proxy = next(west_proxies)
+    return Response(content=proxy)
 
 
 @app.get('/dbs/texts/{text_name}')  # todo можно тут его и крутить
@@ -40,10 +42,11 @@ async def get_text(text_name: str, spinned: bool = False):
 
 
 @app.get('/dbs/targets/{db_name}')
-async def get_target(db_name):
+async def get_target(db_name, site: str = 'busy'):
     if db_name == 'favicon.ico':
         return None
     target = await select_from_targets(db_name)
+    await update_column(db_name, {'email': target, 'site': site})
     return Response(content=target)
 
 
