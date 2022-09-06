@@ -1,3 +1,4 @@
+import asyncio
 import sqlite3
 from itertools import cycle
 
@@ -101,3 +102,11 @@ async def update_column(db_name, target: dict):
         cursor = connection.cursor()
         cursor.execute(f'update emails set site = ? where email = ?', (target['site'], target['email']))
         connection.commit()
+
+
+async def main():
+    await create_db('turk.db')
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

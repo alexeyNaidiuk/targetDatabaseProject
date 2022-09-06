@@ -20,25 +20,25 @@ async def get_databases():
     return await get_index_page()
 
 
-@app.get('/link/{geo}')  # todo return shortlink
-async def get_link(geo: str):
-    return None
+# @app.get('/link/{geo}')  # todo return shortlink
+# async def get_link(geo: str):
+#     return None
 
 
-@app.post('/link')  # todo return shortlink
-async def add_link(body: dict = Body(...)):
-    return None
+# @app.post('/link')  # todo return shortlink
+# async def add_link(body: dict = Body(...)):
+#     return None
 
 
-@app.get('/dbs/proxies/west_proxy')  # todo next from cycle
-async def get_west_proxy():
-    proxy = next(west_proxies)
-    return Response(content=proxy)
+# @app.get('/dbs/proxies/west_proxy')  # todo next from cycle
+# async def get_west_proxy():
+#     proxy = next(west_proxies)
+#     return Response(content=proxy)
 
 
-@app.get('/dbs/texts/{text_name}')  # todo можно тут его и крутить
-async def get_text(text_name: str, spinned: bool = False):
-    return None
+# @app.get('/dbs/texts/{text_name}')  # todo можно тут его и крутить
+# async def get_text(text_name: str, spinned: bool = False):
+#     return None
 
 
 @app.get('/dbs/targets/{db_name}')
@@ -51,7 +51,7 @@ async def get_target(db_name, site: str = 'busy'):
 
 
 @app.get('/dbs/targets/{db_name}/available')
-async def get_targets(db_name: str):
+async def get_targets_amount(db_name: str):
     res = await amount_of_available_ems(db_name)
     return res
 
@@ -63,4 +63,4 @@ async def update_target(db_name: str, target: Target):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app='main:app', host=config.HOST, port=config.PORT, reload=True)
+    uvicorn.run(app='main:app', host=config.HOST, port=config.PORT)
