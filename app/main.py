@@ -1,19 +1,22 @@
-import os
-
 import uvicorn
-from dotenv import load_dotenv
 from fastapi import FastAPI, Response
 
-from data import TurkeyTargetPool, Target
+from app.config import HOST, PORT
+from app.module import TurkeyTargetFilePool, Target, WwmixProxyFilePool, FilePool
 
-load_dotenv()
 app = FastAPI()
-target_pool = TurkeyTargetPool()
+target_pool: FilePool = TurkeyTargetFilePool()
+proxy_pool: FilePool = WwmixProxyFilePool()
 
 
 @app.get('/')
-async def root():
+async def index():
     return {'status': 'ok'}
+
+
+@app.get('/proxies/wwmix/pool')
+async def get_pool():
+    return Response(content='\n'.join(proxy_pool.pool))
 
 
 @app.post('/targets/turkey/append')
@@ -48,4 +51,4 @@ async def get_random_from_target_pool():
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host=os.environ['HOST'], port=int(os.environ['PORT']))
+    uvicorn.run('app.main:app', host=HOST, port=int(PORT))
