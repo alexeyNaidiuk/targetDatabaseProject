@@ -1,14 +1,6 @@
-import os
-
-
-from dotenv import load_dotenv
 import unittest
 
-
-load_dotenv()
-TARGETS_FOLDER = os.environ.get('TARGET_FOLDER')
-PORT = os.environ.get('PORT')
-HOST = os.environ.get('HOST')
+from app.config import HOST, PORT, TARGETS_FOLDER
 
 
 class TestEnvironment(unittest.TestCase):

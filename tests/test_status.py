@@ -1,17 +1,14 @@
-import os
+import json
 import unittest
 
 import requests
-from dotenv import load_dotenv
-import json
 
-
-load_dotenv()
+from app.config import HOST, PORT
 
 
 class TestStatus(unittest.TestCase):
 
     def test_status(self):
-        response = requests.get(f'http://{os.environ.get("HOST")}:{os.environ.get("PORT")}')
+        response = requests.get(f'http://{HOST}:{PORT}')
         content = json.loads(response.content.decode())
         self.assertEqual(content, {'status': 'ok'})

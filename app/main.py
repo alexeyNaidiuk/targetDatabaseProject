@@ -2,11 +2,13 @@ import uvicorn
 from fastapi import FastAPI, Response
 
 from app.config import HOST, PORT
-from app.module import TurkeyTargetFilePool, Target, WwmixProxyFilePool, FilePool
+from app.module import TurkeyTargetFilePool, Target, FilePool
 
 app = FastAPI()
 target_pool: FilePool = TurkeyTargetFilePool()
-proxy_pool: FilePool = WwmixProxyFilePool()
+
+
+# proxy_pool: FilePool = WwmixProxyFilePool()
 
 
 @app.get('/')
@@ -14,9 +16,9 @@ async def index():
     return {'status': 'ok'}
 
 
-@app.get('/proxies/wwmix/pool')
-async def get_pool():
-    return Response(content='\n'.join(proxy_pool.pool))
+# @app.get('/proxies/wwmix/pool')
+# async def get_pool():
+#     return Response(content='\n'.join(proxy_pool.pool))
 
 
 @app.post('/targets/turkey/append')

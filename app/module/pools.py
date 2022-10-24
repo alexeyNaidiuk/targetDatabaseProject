@@ -28,6 +28,9 @@ class FilePool(Pool):
     def __init__(self) -> NoReturn:
         self.reload()
 
+    def append(self, value) -> None:
+        self.pool.append(value)
+
     def reload(self) -> NoReturn:
         with open(self.path) as file:
             self.pool = file.read().split('\n')
@@ -37,6 +40,9 @@ class FilePool(Pool):
             self.reload()
         value = self.pool.pop()
         return value
+
+    def clear(self) -> None:
+        self.pool.clear()
 
     def __len__(self):
         return len(self.pool)

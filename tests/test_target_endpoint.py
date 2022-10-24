@@ -1,15 +1,9 @@
-import os
-
 import unittest
 from threading import Thread
 
 import requests
-from dotenv import load_dotenv
 
-
-load_dotenv()
-HOST = os.environ.get('HOST')
-PORT = os.environ.get('PORT')
+from app.config import HOST, PORT
 
 
 class TestTargetRetrieve(unittest.TestCase):
