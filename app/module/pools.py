@@ -1,3 +1,5 @@
+import abc
+import pathlib
 from typing import NoReturn
 
 from app.config import TARGETS_FOLDER, PROXIES_FOLDER
@@ -6,27 +8,41 @@ from app.config import TARGETS_FOLDER, PROXIES_FOLDER
 class Pool:
     pool: list = []
 
+    def __init__(self):
+        self.reload()
+
+    @abc.abstractmethod
     def pop(self) -> str:
-        ...
+        raise NotImplementedError
 
-    def append(self, value) -> None:
-        ...
+    @abc.abstractmethod
+    def remove(self, value: str):
+        raise NotImplementedError
 
-    def clear(self) -> None:
-        ...
+    @abc.abstractmethod
+    def append(self, value: str) -> NoReturn:
+        raise NotImplementedError
 
-    def reload(self) -> None:
-        ...
+    @abc.abstractmethod
+    def clear(self) -> NoReturn:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def reload(self) -> NoReturn:
+        raise NotImplementedError
+
+    def is_in_pool(self, value: str) -> bool:
+        raise NotImplementedError
 
     def __len__(self) -> int:
-        ...
+        return len(self.pool)
 
 
 class FilePool(Pool):
     path = None
 
-    def __init__(self) -> NoReturn:
-        self.reload()
+    def remove(self, value: str):
+        self.pool.remove(value)
 
     def append(self, value) -> None:
         self.pool.append(value)
@@ -44,16 +60,25 @@ class FilePool(Pool):
     def clear(self) -> None:
         self.pool.clear()
 
-    def __len__(self):
-        return len(self.pool)
-
 
 class TurkeyTargetFilePool(FilePool):
-    path = f'{TARGETS_FOLDER}/all_turk.csv'
+    path = pathlib.Path(TARGETS_FOLDER, 'all_turk.csv')
+
+    def reload(self) -> NoReturn:
+        with open(self.path, encoding='latin-1') as file:
+            self.pool = file.read().split('\n')
+
+
+class RussianTargetFilePool(FilePool):
+    path = pathlib.Path(TARGETS_FOLDER, 'alotof.csv')
+
+    def reload(self) -> NoReturn:
+        with open(self.path, encoding='latin-1') as file:
+            self.pool = file.read().split('\n')
 
 
 class WwmixProxyFilePool(FilePool):
-    path = f'{PROXIES_FOLDER}/wwmix.txt'
+    path = pathlib.Path(PROXIES_FOLDER, 'wwmix.txt')
 
 
 class Factory:

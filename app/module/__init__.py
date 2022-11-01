@@ -1,2 +1,2 @@
 from .models import Target
-from .pools import TurkeyTargetFilePool, FilePool, WwmixProxyFilePool
+from .pools import TurkeyTargetFilePool, FilePool, WwmixProxyFilePool, RussianTargetFilePool
