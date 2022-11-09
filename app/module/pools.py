@@ -94,6 +94,10 @@ class WestProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
 
 
+class CheckedProxyFilePool(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'checked.txt')
+
+
 class Factory:
     pools = {}
 
