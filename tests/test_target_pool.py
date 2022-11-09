@@ -1,6 +1,6 @@
 import unittest
 
-from app.module import TurkeyTargetFilePool, RussianTargetFilePool
+from app.module import TurkeyTargetFilePool, RussianTargetFilePool, RussianDbrTargetFilePool
 
 
 class TestTurkeyTargetPool(unittest.TestCase):
@@ -44,6 +44,29 @@ class TestRussianTargetPool(unittest.TestCase):
 
     def test_reload(self):
         pool = RussianTargetFilePool()
+        pool.clear()
+        pool.reload()
+        self.assertNotEqual([], pool.pool)
+
+
+class TestRussianDbrTargetPool(unittest.TestCase):
+    def test_pop(self):
+        pool = RussianDbrTargetFilePool()
+        target = pool.pop()
+        self.assertEqual('', target)
+
+    def test_append(self):
+        pool = RussianDbrTargetFilePool()
+        pool.append('softumwork@gmail.com')
+        self.assertIn('softumwork@gmail.com', pool.pool)
+
+    def test_clear(self):
+        pool = RussianDbrTargetFilePool()
+        pool.clear()
+        self.assertEqual([], pool.pool)
+
+    def test_reload(self):
+        pool = RussianDbrTargetFilePool()
         pool.clear()
         pool.reload()
         self.assertNotEqual([], pool.pool)

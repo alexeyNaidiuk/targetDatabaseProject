@@ -1,6 +1,6 @@
 import unittest
 
-from app.config import HOST, PORT, TARGETS_FOLDER
+from app.config import HOST, PORT, TARGETS_FOLDER, PROXIES_FOLDER
 
 
 class TestEnvironment(unittest.TestCase):
@@ -9,3 +9,4 @@ class TestEnvironment(unittest.TestCase):
         self.assertIsNotNone(HOST)
         self.assertIsNotNone(PORT)
         self.assertIsNotNone(TARGETS_FOLDER)
+        self.assertIsNotNone(PROXIES_FOLDER)

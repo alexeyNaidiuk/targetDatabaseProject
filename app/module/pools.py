@@ -77,8 +77,21 @@ class RussianTargetFilePool(FilePool):
             self.pool = file.read().split('\n')
 
 
+class RussianDbrTargetFilePool(FilePool):
+    path = pathlib.Path(TARGETS_FOLDER, 'dobro_normalized.csv')
+
+    def reload(self) -> NoReturn:
+        with open(self.path, encoding='latin-1') as file:
+            self.pool = file.read().split('\n')
+            self.pool.remove('')
+
+
 class WwmixProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'wwmix.txt')
+
+
+class WestProxyFilePool(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
 
 
 class Factory:
