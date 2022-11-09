@@ -1,3 +1,6 @@
-.env
-/proxies/
-/targets/
+/proxies/west_proxy.txt
+/proxies/wwmix.txt
+/targets/all_turk.csv
+/targets/alotof.csv
+/targets/dobro_normalized.csv
+/targets/rub36.csv
