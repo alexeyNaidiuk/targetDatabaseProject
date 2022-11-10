@@ -53,12 +53,12 @@ class TestRussianDbrTargetPool(unittest.TestCase):
     def test_pop(self):
         pool = RussianDbrTargetFilePool()
         target = pool.pop()
-        self.assertEqual('', target)
+        self.assertEqual('hel.lo.711@mail.ru', target)
 
-    def test_append(self):
-        pool = RussianDbrTargetFilePool()
-        pool.append('softumwork@gmail.com')
-        self.assertIn('softumwork@gmail.com', pool.pool)
+    # def test_append(self):
+    #     pool = RussianDbrTargetFilePool()
+    #     pool.append('softumwork@gmail.com')
+    #     self.assertIn('softumwork@gmail.com', pool.pool)
 
     def test_clear(self):
         pool = RussianDbrTargetFilePool()
