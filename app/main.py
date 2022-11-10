@@ -160,4 +160,4 @@ async def get_text():
 
 
 if __name__ == '__main__':
-    uvicorn.run('app.main:app', host=HOST, port=int(PORT), reload=True)
+    uvicorn.run('app.main:app', host=HOST, port=int(PORT))
