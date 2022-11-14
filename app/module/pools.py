@@ -75,6 +75,7 @@ class RussianTargetFilePool(FilePool):
     def reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
             self.pool = file.read().split('\n')
+            self.pool = set(self.pool)
 
 
 class RussianDbrTargetFilePool(FilePool):
