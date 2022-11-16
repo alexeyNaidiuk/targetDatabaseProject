@@ -12,21 +12,6 @@ russian_dbr_target_pool: FilePool = RussianDbrTargetFilePool()
 wwmix_proxies: FilePool = WwmixProxyFilePool()
 west_proxies: FilePool = WestProxyFilePool()
 checked_proxies: FilePool = CheckedProxyFilePool()
-texts = {
-    'eng':  '🔥 {Get|Loot|Use} {your|} 50 {FS|freespins|free spins|spins}'
-          ' for a {quick Registration|start|take a part} on FortuneClock by'
-          ' {clicking|following|coming} the 👉 https://$link 👈 below\n#\n\n{Hurry up!|Get a move on!|Rush!} '
-          'This {offer|promo|stock} is limited in time! 🔥',
-    'ru': '{Получи|Забери|Используй} 50 {фриспинов|FS|freespins|free spins|spins} за '
-          '{Регистрацию в клубе|Вход в клуб|Вход в проект|принятие участия в|игру в} FortuneClock '
-          '{переходя|перейдя|} по {следующей|} ссылке {ниже|} 👉 https://$link 👈 '
-          '{Поспеши|Поторопись|Торопись|Не задерживайся}, время действия {бонуса|приза|подарка}'
-          ' {ограничено|лимитировано}!',
-    'tr': "🔥 {Get|Take|Kullan} 50 {ücretsiz dönüş|FS|freespins|ücretsiz dönüş|ücretsiz dönüş}"
-          " {Kulübe kaydolmak|Kulübe girmek|Projeye girmek|katılmak|oynamak} Slottica'yı takip "
-          "{etmek|bu} bağlantı {aşağıda |} {-|:|} 👉 https://$link 👈 {Acele|Acele|Acele|Gecikme},"
-          " {bonus|ödül|hediye} süresi {sınırlı|sınırlı}! 🔥"
-}
 
 
 @app.get('/')
@@ -152,11 +137,6 @@ async def get_random_from_target_pool():
     russian_dbr_target_pool.reload()
     amount = len(russian_dbr_target_pool)
     return Response(content=f'reloaded! current amount is {amount}')
-
-
-@app.get('/texts')
-async def get_text():
-    return texts
 
 
 if __name__ == '__main__':
