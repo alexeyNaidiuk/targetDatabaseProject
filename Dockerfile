@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install -e .
 
-ENV HOST "0.0.0.0"
-ENV PORT "8181"
+ENV HOST "$HOST"
+ENV PORT "$HOST"
 
 CMD ./start_server.sh
