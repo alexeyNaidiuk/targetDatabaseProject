@@ -1,3 +1,3 @@
 #!/bin/bash
 
-venv/bin/python ./app/main.py &
+uvicorn app.main:app --host=$HOST --port=$PORT
