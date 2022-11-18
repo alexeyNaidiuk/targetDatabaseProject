@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   api:
-    build: .
-    network_mode: "host"
+    image: "alexeynaidiuk/myapi:latest"
+    pull_policy: "always"
     env_file:
       - .env
-    pull_policy: "always"
+    network_mode: "host"
