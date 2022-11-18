@@ -5,3 +5,4 @@ services:
     network_mode: "host"
     env_file:
       - .env
+    pull_policy: "always"
