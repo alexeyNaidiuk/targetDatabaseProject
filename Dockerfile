@@ -1,13 +1,13 @@
 FROM python:3.10
 
-WORKDIR /app
+WORKDIR /myapp
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY ./app ./app
-COPY /proxies /proxies
-COPY /targets /targets
+COPY ./proxies ./proxies
+COPY ./targets ./targets
 
 COPY setup.py .
 RUN pip install -e .
