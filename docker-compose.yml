@@ -2,7 +2,7 @@ version: "3.8"
 services:
   api:
     container_name: "api"
-    image: "alexeynaidiuk/myapi:latest"
+    image: "alexeynaidiuk/myapi"
     pull_policy: "always"
     env_file:
       - .env
