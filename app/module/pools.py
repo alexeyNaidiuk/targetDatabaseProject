@@ -12,6 +12,9 @@ class Pool:
     def __init__(self):
         self.reload()
 
+    def info(self) -> dict:
+        return {'amount': len(self)}
+
     @abc.abstractmethod
     def pop(self) -> str:
         raise NotImplementedError
@@ -64,9 +67,15 @@ class FilePool(Pool):
 class TurkeyTargetFilePool(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'all_turk.csv')
 
+    def info(self) -> dict:
+        return {'lang': 'turkey', 'amount': len(self)}
+
 
 class MixRuTargetFilePool(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'test_mixedru.csv')
+
+    def info(self) -> dict:
+        return {'lang': 'russian', 'amount': len(self)}
 
     def reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
@@ -79,6 +88,9 @@ class MixRuTargetFilePool(FilePool):
 class AlotofTargetFilePool(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'alotof.csv')
 
+    def info(self) -> dict:
+        return {'lang': 'russian', 'amount': len(self)}
+
     def reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
             self.pool = file.read().split('\n')
@@ -90,21 +102,36 @@ class AlotofTargetFilePool(FilePool):
 class RussianDbrTargetFilePool(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'dobro_normalized.csv')
 
+    def info(self) -> dict:
+        return {'lang': 'russian', 'amount': len(self)}
+
 
 class Rub36TargetFilePool(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'rub36.csv')
+
+    def info(self) -> dict:
+        return {'lang': 'russian', 'amount': len(self)}
 
 
 class WwmixProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'wwmix.txt')
 
+    def info(self) -> dict:
+        return {'type': 'http', 'amount': len(self)}
+
 
 class WestProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
 
+    def info(self) -> dict:
+        return {'type': 'http', 'amount': len(self)}
+
 
 class CheckedProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'checked.txt')
+
+    def info(self) -> dict:
+        return {'type': 'http', 'amount': len(self)}
 
 
 class TargetsFactory:

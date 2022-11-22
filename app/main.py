@@ -14,12 +14,20 @@ async def index():
 
 @app.get('/targets')
 async def get_targets_keys():
-    return list(TargetsFactory.pools.keys())
+    return {key: item.info() for key, item in TargetsFactory.pools.items()}
 
 
 @app.get('/proxies')
 async def get_targets_keys():
-    return list(ProxiesFactory.pools.keys())
+    return {key: item.info() for key, item in ProxiesFactory.pools.items()}
+
+
+@app.get('/targets/{pool}')
+async def get_pool(pool: str):
+    target_pool: FilePool = TargetsFactory.pools[pool]
+    info = target_pool.info()
+    value = {pool: info}
+    return value
 
 
 @app.get('/proxies/{pool}/pool')
