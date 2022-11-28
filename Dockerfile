@@ -12,4 +12,4 @@ COPY ./app ./app
 COPY setup.py .
 RUN pip install -e .
 
-CMD ["sh", "-c", "uvicorn app.main:app --host=$APP_HOST --port=$APP_PORT"]
+CMD ["sh", "-c", "uvicorn app.main:app --host=$HOST --port=$PORT"]
