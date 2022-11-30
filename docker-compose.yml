@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   api:
+    build: .
     container_name: "api"
     image: "alexeynaidiuk/myapi:master"
     pull_policy: "always"
