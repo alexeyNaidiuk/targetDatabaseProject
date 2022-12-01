@@ -6,14 +6,16 @@ from typing import NoReturn
 from app.config import TARGETS_FOLDER, PROXIES_FOLDER
 
 
-class Pool:
+class Pool(abc.ABC):
     pool: list = []
 
+    @abc.abstractmethod
     def __init__(self):
-        self.reload()
+        raise NotImplementedError
 
+    @abc.abstractmethod
     def info(self) -> dict:
-        return {'amount': len(self)}
+        raise NotImplementedError
 
     @abc.abstractmethod
     def pop(self) -> str:
@@ -36,7 +38,7 @@ class Pool:
         raise NotImplementedError
 
     def is_in_pool(self, value: str) -> bool:
-        raise NotImplementedError
+        return value in self.pool
 
     def __len__(self) -> int:
         return len(self.pool)
@@ -44,6 +46,9 @@ class Pool:
 
 class FilePool(Pool):
     path = None
+
+    def __init__(self):
+        self.reload()
 
     def remove(self, value: str):
         self.pool.remove(value)
@@ -78,11 +83,8 @@ class MixRuTargetFilePool(FilePool):
         return {'lang': 'russian', 'amount': len(self)}
 
     def reload(self) -> NoReturn:
-        with open(self.path, encoding='latin-1') as file:
-            self.pool = file.read().split('\n')
-            shuffle(self.pool)
-            if '' in self.pool:
-                self.pool.remove('')
+        super().reload()
+        shuffle(self.pool)
 
 
 class AlotofTargetFilePool(FilePool):
@@ -92,11 +94,8 @@ class AlotofTargetFilePool(FilePool):
         return {'lang': 'russian', 'amount': len(self)}
 
     def reload(self) -> NoReturn:
-        with open(self.path, encoding='latin-1') as file:
-            self.pool = file.read().split('\n')
-            shuffle(self.pool)
-            if '' in self.pool:
-                self.pool.remove('')
+        super().reload()
+        shuffle(self.pool)
 
 
 class RussianDbrTargetFilePool(FilePool):
@@ -148,5 +147,5 @@ class ProxiesFactory:
     pools = {
         'wwmix': WwmixProxyFilePool(),
         'west': WestProxyFilePool(),
-        'checked': CheckedProxyFilePool()
+        'checked': CheckedProxyFilePool(),
     }
