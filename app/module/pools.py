@@ -45,9 +45,11 @@ class Pool(abc.ABC):
 
 
 class FilePool(Pool):
-    path = None
+    path = pathlib.Path()
 
     def __init__(self):
+        if not self.path.exists():
+            self.path.write_text('')
         self.reload()
 
     def remove(self, value: str):
@@ -133,6 +135,31 @@ class CheckedProxyFilePool(FilePool):
         return {'type': 'http', 'amount': len(self)}
 
 
+class ParsedProxyFilePool(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
+
+    def parse_proxies(self):
+        ...
+
+    def __init__(self):
+        super().__init__()
+        self.parse_proxies()
+
+    def info(self) -> dict:
+        return {'amount': len(self)}
+
+
+class VladProxyFilePool(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'vlad.txt')
+
+    def __init__(self):
+        super(VladProxyFilePool, self).__init__()
+        self.pool = set(self.pool)
+
+    def info(self) -> dict:
+        return {'amount': len(self), 'type': 'vlad kypil'}
+
+
 class TargetsFactory:
     pools = {
         'turkey': TurkeyTargetFilePool(),
@@ -148,4 +175,6 @@ class ProxiesFactory:
         'wwmix': WwmixProxyFilePool(),
         'west': WestProxyFilePool(),
         'checked': CheckedProxyFilePool(),
+        # 'parsed': ParsedProxyFilePool(),
+        'vlad': VladProxyFilePool()
     }

@@ -23,11 +23,17 @@ async def get_targets_keys():
 
 
 @app.get('/targets/{pool}')
-async def get_pool(pool: str):
+async def get_targets_pool_info(pool: str):
     target_pool: FilePool = TargetsFactory.pools[pool]
     info = target_pool.info()
-    value = {pool: info}
-    return value
+    return info
+
+
+@app.get('/proxies/{pool}')
+async def get_proxies_pool_info(pool: str):
+    proxies_pool: FilePool = ProxiesFactory.pools[pool]
+    info = proxies_pool.info()
+    return info
 
 
 @app.get('/proxies/{pool}/pool')
@@ -73,4 +79,4 @@ async def get_pool_length(pool: str):
 
 
 if __name__ == '__main__':
-    uvicorn.run('app.main:app', host=HOST, port=int(PORT))
+    uvicorn.run('app.main:app', host=HOST, port=int(PORT), reload=True)

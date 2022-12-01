@@ -4,7 +4,7 @@ from threading import Thread
 import requests
 
 from app.config import HOST, PORT
-from app.module.pools import WwmixProxyFilePool, WestProxyFilePool, CheckedProxyFilePool
+from app.module.pools import WwmixProxyFilePool, WestProxyFilePool, CheckedProxyFilePool, VladProxyFilePool
 
 
 def check_pool(proxy_pool, time_limit: int | None = None) -> list:
@@ -59,6 +59,16 @@ class TestProxiesEndpoint(unittest.TestCase):
         self.assertListEqual(CheckedProxyFilePool().pool, pool)
 
         working = check_pool(pool, time_limit=10)
+        for p in working:
+            print(p)
+        self.assertNotEqual(working, [])
+
+    def test_vlad_proxies(self):
+        url = f'http://{HOST}:{PORT}/proxies/vlad/pool'
+        pool = requests.get(url).text.splitlines()
+        self.assertListEqual(VladProxyFilePool().pool, pool)
+
+        working = check_pool(pool)
         for p in working:
             print(p)
         self.assertNotEqual(working, [])
