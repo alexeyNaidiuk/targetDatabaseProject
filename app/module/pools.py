@@ -9,8 +9,11 @@ from app.config import TARGETS_FOLDER, PROXIES_FOLDER
 class Pool(abc.ABC):
     pool: list = []
 
+    def get_pool(self) -> list:
+        return self.pool
+
     @abc.abstractmethod
-    def __init__(self):
+    def pop(self) -> str:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -18,56 +21,42 @@ class Pool(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def pop(self) -> str:
+    def __init__(self):
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def remove(self, value: str):
-        raise NotImplementedError
-
-    # @abc.abstractmethod
-    # def append(self, value: str) -> NoReturn:
-    #     raise NotImplementedError
-
-    @abc.abstractmethod
-    def clear(self) -> NoReturn:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def reload(self) -> NoReturn:
-        raise NotImplementedError
-
-    def is_in_pool(self, value: str) -> bool:
-        return value in self.pool
 
     def __len__(self) -> int:
         return len(self.pool)
+
+    @abc.abstractmethod
+    def _clear(self) -> NoReturn:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def _reload(self) -> NoReturn:
+        raise NotImplementedError
 
 
 class FilePool(Pool):
     path = pathlib.Path()
 
+    def pop(self) -> str:
+        if len(self.pool) == 0:
+            self._reload()
+        value = self.pool.pop()
+        return value
+
     def __init__(self):
         if not self.path.exists():
             self.path.write_text('')
-        self.reload()
+        self._reload()
 
-    def remove(self, value: str):
-        self.pool.remove(value)
-
-    def reload(self) -> NoReturn:
+    def _reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
             self.pool = file.read().split('\n')
             if '' in self.pool:
                 self.pool.remove('')
 
-    def pop(self) -> str:
-        if len(self.pool) == 0:
-            self.reload()
-        value = self.pool.pop()
-        return value
-
-    def clear(self) -> None:
+    def _clear(self) -> None:
         self.pool.clear()
 
 
@@ -84,8 +73,8 @@ class MixRuTargetFilePool(FilePool):
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
-    def reload(self) -> NoReturn:
-        super().reload()
+    def _reload(self) -> NoReturn:
+        super()._reload()
         shuffle(self.pool)
 
 
@@ -95,8 +84,8 @@ class AlotofTargetFilePool(FilePool):
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
-    def reload(self) -> NoReturn:
-        super().reload()
+    def _reload(self) -> NoReturn:
+        super()._reload()
         shuffle(self.pool)
 
 
@@ -135,20 +124,6 @@ class CheckedProxyFilePool(FilePool):
         return {'type': 'http', 'amount': len(self)}
 
 
-class ParsedProxyFilePool(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
-
-    def parse_proxies(self):
-        ...
-
-    def __init__(self):
-        super().__init__()
-        self.parse_proxies()
-
-    def info(self) -> dict:
-        return {'amount': len(self)}
-
-
 class VladProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'vlad.txt')
 
@@ -156,7 +131,11 @@ class VladProxyFilePool(FilePool):
         return {'amount': len(self), 'type': 'vlad kypil'}
 
 
-class TargetsFactory:
+class Factory:
+    pools = {}
+
+
+class TargetsFactory(Factory):
     pools = {
         'turkey': TurkeyTargetFilePool(),
         'alotof': AlotofTargetFilePool(),
@@ -166,7 +145,7 @@ class TargetsFactory:
     }
 
 
-class ProxiesFactory:
+class ProxiesFactory(Factory):
     pools = {
         'wwmix': WwmixProxyFilePool(),
         'west': WestProxyFilePool(),
@@ -174,3 +153,9 @@ class ProxiesFactory:
         # 'parsed': ParsedProxyFilePool(),
         'vlad': VladProxyFilePool()
     }
+
+
+factories = {
+    'targets': TargetsFactory,
+    'proxies': ProxiesFactory
+}

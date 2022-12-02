@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI, Response
 
 from app.config import HOST, PORT
-from app.module import Target, TargetsFactory, ProxiesFactory, FilePool
+from app.module import FilePool, factories, Factory
 
 app = FastAPI()
 
@@ -12,70 +12,37 @@ async def index():
     return {'status': 'ok'}
 
 
-@app.get('/targets')
-async def get_targets_keys():
-    return {key: item.info() for key, item in TargetsFactory.pools.items()}
+@app.get('/{factory}')
+async def get_factory_keys(factory: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        return {key: item.info() for key, item in factory_instance.pools.items()}
 
 
-@app.get('/proxies')
-async def get_targets_keys():
-    return {key: item.info() for key, item in ProxiesFactory.pools.items()}
+@app.get('/{factory}/{pool}')
+async def get_targets_pool_info(factory: str, pool: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        target_pool: FilePool = factory_instance.pools[pool]
+        info = target_pool.info()
+        return info
 
 
-@app.get('/targets/{pool}')
-async def get_targets_pool_info(pool: str):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    info = target_pool.info()
-    return info
+@app.get('/{factory}/{pool}/pool')
+async def get_proxies(factory: str, pool: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        proxy_pool: FilePool = factory_instance.pools[pool]
+        return Response(content='\n'.join(proxy_pool.get_pool()))
 
 
-@app.get('/proxies/{pool}')
-async def get_proxies_pool_info(pool: str):
-    proxies_pool: FilePool = ProxiesFactory.pools[pool]
-    info = proxies_pool.info()
-    return info
-
-
-@app.get('/proxies/{pool}/pool')
-async def get_proxies(pool: str):
-    proxy_pool: FilePool = ProxiesFactory.pools[pool]
-    return Response(content='\n'.join(proxy_pool.pool))
-
-
-@app.delete('/targets/{pool}/remove')
-async def delete_target_from_pool(pool: str, target: Target):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    target_pool.remove(target.email)
-    return Response(content=f'{target.email} deleted from pool')
-
-
-@app.get('/targets/{pool}/clear')
-async def clear_pool(pool: str):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    target_pool.clear()
-    return Response(content=f'target pool cleared')
-
-
-@app.get('/targets/{pool}/pop')
-async def pop_target_from_pool(pool: str):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    value = target_pool.pop()
-    return Response(content=value)
-
-
-@app.get('/targets/{pool}/reload')
-async def reload_pool(pool: str):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    target_pool.reload()
-    amount = len(target_pool)
-    return Response(content=f'reloaded! current amount is {amount}')
-
-
-@app.get('/targets/{pool}/length')
-async def get_pool_length(pool: str):
-    target_pool: FilePool = TargetsFactory.pools[pool]
-    amount = len(target_pool)
-    return Response(content=str(amount))
+@app.get('/{factory}/{pool}/pop')
+async def pop_target_from_pool(factory: str, pool: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        target_pool: FilePool = factory_instance.pools[pool]
+        value = target_pool.pop()
+        return Response(content=value)
 
 
 if __name__ == '__main__':

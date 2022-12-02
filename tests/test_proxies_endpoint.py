@@ -36,34 +36,34 @@ class TestProxiesEndpoint(unittest.TestCase):
     def test_wwmix_proxies(self):
         url = f'http://{HOST}:{PORT}/proxies/wwmix/pool'
         pool = requests.get(url).text.splitlines()
-        self.assertListEqual(WwmixProxyFilePool().pool, pool)
+        self.assertListEqual(WwmixProxyFilePool().get_pool(), pool)
 
-        working = check_pool(pool)
+        working = check_pool(pool, time_limit=10)
         print(len(working))
         self.assertNotEqual(working, [])
 
     def test_west_proxies(self):
         url = f'http://{HOST}:{PORT}/proxies/west/pool'
         pool = requests.get(url).text.splitlines()
-        self.assertListEqual(WestProxyFilePool().pool, pool)
+        self.assertListEqual(WestProxyFilePool().get_pool(), pool)
 
-        working = check_pool(pool)
+        working = check_pool(pool, time_limit=10)
         print(len(working))
         self.assertNotEqual(working, [])
 
     def test_checked_proxies(self):
         url = f'http://{HOST}:{PORT}/proxies/checked/pool'
         pool = requests.get(url).text.splitlines()
-        self.assertListEqual(CheckedProxyFilePool().pool, pool)
+        self.assertListEqual(CheckedProxyFilePool().get_pool(), pool)
 
-        working = check_pool(pool)
+        working = check_pool(pool, time_limit=10)
         print(len(working))
         self.assertNotEqual(working, [])
 
     def test_vlad_proxies(self):
         url = f'http://{HOST}:{PORT}/proxies/vlad/pool'
         pool = requests.get(url).text.splitlines()
-        self.assertListEqual(VladProxyFilePool().pool, pool)
+        self.assertListEqual(VladProxyFilePool().get_pool(), pool)
 
         working = check_pool(pool, time_limit=15)
         print(len(working))
