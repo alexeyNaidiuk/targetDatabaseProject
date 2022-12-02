@@ -12,11 +12,11 @@ class TestTargetPool(unittest.TestCase):
 
     def test_clear(self):
         for pool in TargetsFactory.pools.values():
-            pool._clear()
+            pool.clear()
             self.assertEqual([], pool.pool)
 
     def test_reload(self):
         for pool in TargetsFactory.pools.values():
-            pool._clear()
-            pool._reload()
+            pool.clear()
+            pool.reload()
             self.assertNotEqual([], pool.pool)

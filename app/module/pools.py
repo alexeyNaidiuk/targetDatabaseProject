@@ -28,11 +28,11 @@ class Pool(abc.ABC):
         return len(self.pool)
 
     @abc.abstractmethod
-    def _clear(self) -> NoReturn:
+    def clear(self) -> NoReturn:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _reload(self) -> NoReturn:
+    def reload(self) -> NoReturn:
         raise NotImplementedError
 
 
@@ -41,22 +41,22 @@ class FilePool(Pool):
 
     def pop(self) -> str:
         if len(self.pool) == 0:
-            self._reload()
+            self.reload()
         value = self.pool.pop()
         return value
 
     def __init__(self):
         if not self.path.exists():
             self.path.write_text('')
-        self._reload()
+        self.reload()
 
-    def _reload(self) -> NoReturn:
+    def reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
             self.pool = file.read().split('\n')
             if '' in self.pool:
                 self.pool.remove('')
 
-    def _clear(self) -> None:
+    def clear(self) -> None:
         self.pool.clear()
 
 
@@ -73,8 +73,8 @@ class MixRuTargetFilePool(FilePool):
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
-    def _reload(self) -> NoReturn:
-        super()._reload()
+    def reload(self) -> NoReturn:
+        super().reload()
         shuffle(self.pool)
 
 
@@ -84,8 +84,8 @@ class AlotofTargetFilePool(FilePool):
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
-    def _reload(self) -> NoReturn:
-        super()._reload()
+    def reload(self) -> NoReturn:
+        super().reload()
         shuffle(self.pool)
 
 
