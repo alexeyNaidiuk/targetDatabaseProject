@@ -152,10 +152,6 @@ class ParsedProxyFilePool(FilePool):
 class VladProxyFilePool(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'vlad.txt')
 
-    def __init__(self):
-        super(VladProxyFilePool, self).__init__()
-        self.pool = set(self.pool)
-
     def info(self) -> dict:
         return {'amount': len(self), 'type': 'vlad kypil'}
 

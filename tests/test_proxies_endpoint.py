@@ -15,11 +15,11 @@ def check_pool(proxy_pool, time_limit: int | None = None) -> list:
         proxies = {'http': proxy, 'https': proxy}
         try:
             response = requests.get('https://api.ipify.org', proxies=proxies, timeout=time_limit)
-            print(response.text)
-            if response:
-                working.append(f'http://{proxy}')
-        except Exception as e:
-            print(e)
+            if response.ok:
+                print(proxy)
+                working.append(proxy)
+        except:
+            pass
 
     for p in proxy_pool:
         t = Thread(target=check_proxy, args=(p,))
@@ -38,9 +38,8 @@ class TestProxiesEndpoint(unittest.TestCase):
         pool = requests.get(url).text.splitlines()
         self.assertListEqual(WwmixProxyFilePool().pool, pool)
 
-        working = check_pool(pool, time_limit=10)
-        for p in working:
-            print(p)
+        working = check_pool(pool)
+        print(len(working))
         self.assertNotEqual(working, [])
 
     def test_west_proxies(self):
@@ -48,9 +47,8 @@ class TestProxiesEndpoint(unittest.TestCase):
         pool = requests.get(url).text.splitlines()
         self.assertListEqual(WestProxyFilePool().pool, pool)
 
-        working = check_pool(pool, time_limit=10)
-        for p in working:
-            print(p)
+        working = check_pool(pool)
+        print(len(working))
         self.assertNotEqual(working, [])
 
     def test_checked_proxies(self):
@@ -58,9 +56,8 @@ class TestProxiesEndpoint(unittest.TestCase):
         pool = requests.get(url).text.splitlines()
         self.assertListEqual(CheckedProxyFilePool().pool, pool)
 
-        working = check_pool(pool, time_limit=10)
-        for p in working:
-            print(p)
+        working = check_pool(pool)
+        print(len(working))
         self.assertNotEqual(working, [])
 
     def test_vlad_proxies(self):
@@ -68,7 +65,6 @@ class TestProxiesEndpoint(unittest.TestCase):
         pool = requests.get(url).text.splitlines()
         self.assertListEqual(VladProxyFilePool().pool, pool)
 
-        working = check_pool(pool)
-        for p in working:
-            print(p)
+        working = check_pool(pool, time_limit=15)
+        print(len(working))
         self.assertNotEqual(working, [])
