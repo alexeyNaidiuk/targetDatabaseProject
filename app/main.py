@@ -45,5 +45,23 @@ async def pop_target_from_pool(factory: str, pool: str):
         return Response(content=value)
 
 
+@app.get('/{factory}/{pool}/clear')
+async def pop_target_from_pool(factory: str, pool: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        target_pool: FilePool = factory_instance.pools[pool]
+        target_pool.clear()
+        return target_pool.info()
+
+
+@app.get('/{factory}/{pool}/reload')
+async def pop_target_from_pool(factory: str, pool: str):
+    factory_instance: Factory = factories.get(factory)
+    if factory_instance:
+        target_pool: FilePool = factory_instance.pools[pool]
+        target_pool.reload()
+        return target_pool.info()
+
+
 if __name__ == '__main__':
     uvicorn.run('app.main:app', host=HOST, port=int(PORT), reload=True)
