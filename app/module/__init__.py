@@ -1,2 +1,2 @@
 from .models import Target
-from .pools import TargetsFactory, ProxiesFactory, FilePool, factories, Factory
+from .pools import FilePool, factories

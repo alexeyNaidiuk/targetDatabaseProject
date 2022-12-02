@@ -131,31 +131,19 @@ class VladProxyFilePool(FilePool):
         return {'amount': len(self), 'type': 'vlad kypil'}
 
 
-class Factory:
-    pools = {}
-
-
-class TargetsFactory(Factory):
-    pools = {
+factories = {
+    'targets': {
         'turkey': TurkeyTargetFilePool(),
         'alotof': AlotofTargetFilePool(),
         'dbru': RussianDbrTargetFilePool(),
         'mixru': MixRuTargetFilePool(),
         'rub36': Rub36TargetFilePool()
-    }
-
-
-class ProxiesFactory(Factory):
-    pools = {
+    },
+    'proxies': {
         'wwmix': WwmixProxyFilePool(),
         'west': WestProxyFilePool(),
         'checked': CheckedProxyFilePool(),
         # 'parsed': ParsedProxyFilePool(),
         'vlad': VladProxyFilePool()
     }
-
-
-factories = {
-    'targets': TargetsFactory,
-    'proxies': ProxiesFactory
 }
