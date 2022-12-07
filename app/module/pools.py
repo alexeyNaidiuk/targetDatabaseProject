@@ -131,6 +131,13 @@ class VladProxyFilePool(FilePool):
         return {'amount': len(self), 'type': 'vlad kypil'}
 
 
+class ParsedProxyFilePool(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
+
+    def info(self) -> dict:
+        return {'amount': len(self), 'type': 'parsed'}
+
+
 factories = {
     'targets': {
         'turkey': TurkeyTargetFilePool(),
@@ -143,7 +150,7 @@ factories = {
         'wwmix': WwmixProxyFilePool(),
         'west': WestProxyFilePool(),
         'checked': CheckedProxyFilePool(),
-        # 'parsed': ParsedProxyFilePool(),
+        'parsed': ParsedProxyFilePool(),
         'vlad': VladProxyFilePool()
     }
 }
