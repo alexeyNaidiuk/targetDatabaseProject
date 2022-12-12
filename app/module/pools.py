@@ -148,6 +148,7 @@ factories = {
         'alotof': AlotofTargets(),
         'dbru': DbrTargets(),
         'mixru': MixRuTargets(),
+        'dadru': DadruTargets(),
         'rub36': Rub36Targets()
     },
     'proxies': {
