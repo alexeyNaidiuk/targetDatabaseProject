@@ -60,14 +60,21 @@ class FilePool(Pool):
         self.pool.clear()
 
 
-class TurkeyTargetFilePool(FilePool):
+class TurkeyTarget(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'all_turk.csv')
 
     def info(self) -> dict:
         return {'lang': 'turkey', 'amount': len(self)}
 
 
-class MixRuTargetFilePool(FilePool):
+class DadruTargets(FilePool):
+    path = pathlib.Path(TARGETS_FOLDER, 'dadru.csv')
+
+    def info(self) -> dict:
+        return {'lang': 'ru', 'amount': len(self)}
+
+
+class MixRuTargets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'test_mixedru.csv')
 
     def info(self) -> dict:
@@ -78,7 +85,7 @@ class MixRuTargetFilePool(FilePool):
         shuffle(self.pool)
 
 
-class AlotofTargetFilePool(FilePool):
+class AlotofTargets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'alotof.csv')
 
     def info(self) -> dict:
@@ -89,14 +96,14 @@ class AlotofTargetFilePool(FilePool):
         shuffle(self.pool)
 
 
-class RussianDbrTargetFilePool(FilePool):
+class DbrTargets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'dobro_normalized.csv')
 
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
 
-class Rub36TargetFilePool(FilePool):
+class Rub36Targets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'rub36.csv')
 
     def info(self) -> dict:
@@ -137,11 +144,11 @@ class ParsedProxy(FilePool):
 
 factories = {
     'targets': {
-        'turkey': TurkeyTargetFilePool(),
-        'alotof': AlotofTargetFilePool(),
-        'dbru': RussianDbrTargetFilePool(),
-        'mixru': MixRuTargetFilePool(),
-        'rub36': Rub36TargetFilePool()
+        'turkey': TurkeyTarget(),
+        'alotof': AlotofTargets(),
+        'dbru': DbrTargets(),
+        'mixru': MixRuTargets(),
+        'rub36': Rub36Targets()
     },
     'proxies': {
         'wwmix': WwmixProxy(),
