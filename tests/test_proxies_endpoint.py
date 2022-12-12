@@ -3,8 +3,8 @@ from threading import Thread
 
 import requests
 
-from app.config import HOST, PORT
-from app.module.pools import WwmixProxyFilePool, WestProxyFilePool, CheckedProxyFilePool, VladProxyFilePool, ParsedProxyFilePool
+from app.config import PORT
+from app.module.pools import factories
 
 
 def check_pool(proxy_pool, time_limit: int | None = None) -> list:
@@ -33,47 +33,8 @@ def check_pool(proxy_pool, time_limit: int | None = None) -> list:
 
 class TestProxiesEndpoint(unittest.TestCase):
 
-    def test_wwmix_proxies(self):
-        url = f'http://{HOST}:{PORT}/proxies/wwmix/pool'
-        pool = requests.get(url).text.splitlines()
-        self.assertListEqual(WwmixProxyFilePool().get_pool(), pool)
-
-        working = check_pool(pool, time_limit=10)
-        print(len(working))
-        self.assertNotEqual(working, [])
-
-    def test_west_proxies(self):
-        url = f'http://{HOST}:{PORT}/proxies/west/pool'
-        pool = requests.get(url).text.splitlines()
-        self.assertListEqual(WestProxyFilePool().get_pool(), pool)
-
-        working = check_pool(pool, time_limit=10)
-        print(len(working))
-        self.assertNotEqual(working, [])
-
-    def test_checked_proxies(self):
-        url = f'http://{HOST}:{PORT}/proxies/checked/pool'
-        pool = requests.get(url).text.splitlines()
-        self.assertListEqual(CheckedProxyFilePool().get_pool(), pool)
-
-        working = check_pool(pool, time_limit=10)
-        print(len(working))
-        self.assertNotEqual(working, [])
-
-    def test_vlad_proxies(self):
-        url = f'http://{HOST}:{PORT}/proxies/vlad/pool'
-        pool = requests.get(url).text.splitlines()
-        self.assertListEqual(VladProxyFilePool().get_pool(), pool)
-
-        working = check_pool(pool, time_limit=15)
-        print(len(working))
-        self.assertNotEqual(working, [])
-
-    def test_parsed_proxies(self):
-        url = f'http://{HOST}:{PORT}/proxies/parsed/pool'
-        pool = requests.get(url).text.splitlines()
-        self.assertListEqual(ParsedProxyFilePool().get_pool(), pool)
-
-        working = check_pool(pool, time_limit=10)
-        print(len(working))
-        self.assertNotEqual(working, [])
+    def test_proxies(self):
+        for pool_name, pool_instance in factories['proxies'].items():
+            url = f'http://localhost:{PORT}/proxies/{pool_name}/pool'
+            pool = requests.get(url).text.splitlines()
+            self.assertListEqual(pool_instance.get_pool(), pool)

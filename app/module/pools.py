@@ -103,36 +103,33 @@ class Rub36TargetFilePool(FilePool):
         return {'lang': 'russian', 'amount': len(self)}
 
 
-class WwmixProxyFilePool(FilePool):
+class WwmixProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'wwmix.txt')
 
     def info(self) -> dict:
         return {'type': 'http', 'amount': len(self)}
 
 
-class WestProxyFilePool(FilePool):
+class WestProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
 
     def info(self) -> dict:
         return {'type': 'http', 'amount': len(self)}
 
 
-class CheckedProxyFilePool(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'checked.txt')
-
-    def info(self) -> dict:
-        return {'type': 'http', 'amount': len(self)}
-
-
-class VladProxyFilePool(FilePool):
+class VladProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'vlad.txt')
 
     def info(self) -> dict:
         return {'amount': len(self), 'type': 'vlad kypil'}
 
 
-class ParsedProxyFilePool(FilePool):
+class ParsedProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
+
+    def get_pool(self) -> list:
+        self.reload()
+        return self.pool
 
     def info(self) -> dict:
         return {'amount': len(self), 'type': 'parsed'}
@@ -147,10 +144,9 @@ factories = {
         'rub36': Rub36TargetFilePool()
     },
     'proxies': {
-        'wwmix': WwmixProxyFilePool(),
-        'west': WestProxyFilePool(),
-        'checked': CheckedProxyFilePool(),
-        'parsed': ParsedProxyFilePool(),
-        'vlad': VladProxyFilePool()
+        'wwmix': WwmixProxy(),
+        'west': WestProxy(),
+        'parsed': ParsedProxy(),
+        'vlad': VladProxy(),
     }
 }
