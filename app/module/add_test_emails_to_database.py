@@ -17,10 +17,11 @@ def main():
     suffix = 'dadru'
     original_list = get_database(Path(TARGETS_FOLDER, f'{suffix}.csv'))
     step = 362
+    cc = step
     c = 1
-    while step <= len(original_list):
-        original_list.insert(step, f'softumwork+{suffix}{c}@gmail.com')
-        step += step
+    while cc < len(original_list):
+        original_list.insert(cc, f'softumwork+{suffix}{c}@gmail.com')
+        cc += step
         c += 1
     save_database(Path(TARGETS_FOLDER, f'test_{suffix}.csv'), original_list)
 
