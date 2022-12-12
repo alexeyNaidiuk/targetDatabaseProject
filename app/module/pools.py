@@ -68,7 +68,7 @@ class TurkeyTarget(FilePool):
 
 
 class DadruTargets(FilePool):
-    path = pathlib.Path(TARGETS_FOLDER, 'dadru.csv')
+    path = pathlib.Path(TARGETS_FOLDER, 'test_dadru.csv')
 
     def info(self) -> dict:
         return {'lang': 'ru', 'amount': len(self)}
