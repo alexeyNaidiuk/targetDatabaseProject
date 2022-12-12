@@ -73,6 +73,10 @@ class DadruTargets(FilePool):
     def info(self) -> dict:
         return {'lang': 'ru', 'amount': len(self)}
 
+    def reload(self) -> NoReturn:
+        super().reload()
+        shuffle(self.pool)
+
 
 class MixRuTargets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'test_mixedru.csv')
