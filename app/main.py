@@ -64,4 +64,4 @@ async def reload_pool(factory: str, pool: str):
 
 
 if __name__ == '__main__':
-    uvicorn.run('app.main:app', host=HOST, port=int(PORT), reload=True)
+    uvicorn.run('app.main:app', host=HOST, port=int(PORT))
