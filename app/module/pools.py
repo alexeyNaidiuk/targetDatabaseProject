@@ -61,7 +61,7 @@ class FilePool(Pool):
 
 
 class TurkeyTarget(FilePool):
-    path = pathlib.Path(TARGETS_FOLDER, 'all_turk.csv')
+    path = pathlib.Path(TARGETS_FOLDER, 'test_all_turk.csv')
 
     def info(self) -> dict:
         return {'lang': 'turkey', 'amount': len(self)}
@@ -86,7 +86,7 @@ class MixRuTargets(FilePool):
 
 
 class AlotofTargets(FilePool):
-    path = pathlib.Path(TARGETS_FOLDER, 'alotof.csv')
+    path = pathlib.Path(TARGETS_FOLDER, 'test_alotof.csv')
 
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
@@ -97,14 +97,14 @@ class AlotofTargets(FilePool):
 
 
 class DbrTargets(FilePool):
-    path = pathlib.Path(TARGETS_FOLDER, 'dobro_normalized.csv')
+    path = pathlib.Path(TARGETS_FOLDER, 'test_dobro_normalized.csv')
 
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
 
 class Rub36Targets(FilePool):
-    path = pathlib.Path(TARGETS_FOLDER, 'rub36.csv')
+    path = pathlib.Path(TARGETS_FOLDER, 'test_rub36.csv')
 
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
@@ -144,7 +144,7 @@ class ParsedProxy(FilePool):
 
 factories = {
     'targets': {
-        'turkey': TurkeyTarget(),
+        'all_turk': TurkeyTarget(),
         'alotof': AlotofTargets(),
         'dbru': DbrTargets(),
         'mixru': MixRuTargets(),
