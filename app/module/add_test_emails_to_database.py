@@ -4,18 +4,18 @@ from app.config import TARGETS_FOLDER
 
 
 def get_database(path: Path | str):
-    with open(path, encoding='latin-1') as f:
+    with open(path) as f:
         return f.read().split('\n')
 
 
 def save_database(path: Path | str, list_to_save: list):
-    with open(path, 'w', encoding='latin-1') as f:
+    with open(path, 'w') as f:
         f.write('\n'.join(list_to_save))
 
 
 def main():
-    file_name = 'rub36'
-    suffix = 'rub36'
+    file_name = 'all_turk'
+    suffix = 'turk'
     original_list = get_database(Path(TARGETS_FOLDER, f'{file_name}.csv'))
     step = 500
     cc = step

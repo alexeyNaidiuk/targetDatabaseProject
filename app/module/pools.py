@@ -144,7 +144,7 @@ class ParsedProxy(FilePool):
 
 factories = {
     'targets': {
-        'all_turk': TurkeyTarget(),
+        'turk': TurkeyTarget(),
         'alotof': AlotofTargets(),
         'dbru': DbrTargets(),
         'mixru': MixRuTargets(),
