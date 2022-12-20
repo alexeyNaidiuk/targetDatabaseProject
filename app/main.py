@@ -3,6 +3,7 @@ from fastapi import FastAPI, Response
 
 from app.config import HOST, PORT
 from app.module import FilePool, factories
+from app.module.link_shortner import get_link
 
 app = FastAPI()
 
@@ -10,6 +11,12 @@ app = FastAPI()
 @app.get('/')
 async def root():
     return {'status': 'ok'}
+
+
+@app.get('/link')
+async def get_shortened_link(project_name: str, targets_base: str):
+    link = get_link(target_pool_name=targets_base, referal_to_project=project_name)
+    return Response(content=link)
 
 
 @app.get('/{factory}')
@@ -61,7 +68,6 @@ async def reload_pool(factory: str, pool: str):
         target_pool: FilePool = factory_instance[pool]
         target_pool.reload()
         return target_pool.info()
-
 
 if __name__ == '__main__':
     uvicorn.run('app.main:app', host=HOST, port=int(PORT))

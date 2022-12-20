@@ -11,6 +11,7 @@ PROXIES_FOLDER = pathlib.Path(PACKAGE_FOLDER, 'proxies')
 
 HOST = os.environ['HOST']
 PORT = os.environ['PORT']
+ZENNO_KEY = os.environ['ZENNO_KEY']
 
 if not TARGETS_FOLDER.exists():
     os.mkdir(TARGETS_FOLDER)
