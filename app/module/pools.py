@@ -50,9 +50,14 @@ class FilePool(Pool):
             self.path.write_text('')
         self.reload()
 
+    def get_pool(self) -> list:
+        self.reload()
+        return self.pool
+
     def reload(self) -> NoReturn:
         with open(self.path, encoding='latin-1') as file:
             self.pool = file.read().split('\n')
+            shuffle(self.pool)
             if '' in self.pool:
                 self.pool.remove('')
 
@@ -80,20 +85,12 @@ class MixRuTargets(FilePool):
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
 
-    def reload(self) -> NoReturn:
-        super().reload()
-        shuffle(self.pool)
-
 
 class AlotofTargets(FilePool):
     path = pathlib.Path(TARGETS_FOLDER, 'test_alotof.csv')
 
     def info(self) -> dict:
         return {'lang': 'russian', 'amount': len(self)}
-
-    def reload(self) -> NoReturn:
-        super().reload()
-        shuffle(self.pool)
 
 
 class DbrTargets(FilePool):
@@ -134,12 +131,15 @@ class VladProxy(FilePool):
 class ParsedProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
 
-    def get_pool(self) -> list:
-        self.reload()
-        return self.pool
-
     def info(self) -> dict:
         return {'amount': len(self), 'type': 'parsed'}
+
+
+class WebShareProxy(FilePool):
+    path = pathlib.Path(PROXIES_FOLDER, 'webshare.txt')
+
+    def info(self) -> dict:
+        return {'amount': len(self), 'type': 'webshare private'}
 
 
 factories = {
@@ -156,5 +156,6 @@ factories = {
         'west': WestProxy(),
         'parsed': ParsedProxy(),
         'vlad': VladProxy(),
+        'webshare': VladProxy(),
     }
 }
