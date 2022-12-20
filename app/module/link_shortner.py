@@ -26,5 +26,4 @@ def get_link(target_pool_name: str, referal_to_project: str) -> str:
     params = {'key': ZENNO_KEY, 'shurl': url}
     response = requests.get(URL, params=params)
     content = response.text
-    print(content)
     return content

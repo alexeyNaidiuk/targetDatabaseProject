@@ -13,6 +13,11 @@ async def root():
     return {'status': 'ok'}
 
 
+# @app.get('/text')
+# async def get_text(lang: str, ):
+#     return 'text'
+
+
 @app.get('/link')
 async def get_shortened_link(project_name: str, targets_base: str):
     link = get_link(target_pool_name=targets_base, referal_to_project=project_name)
