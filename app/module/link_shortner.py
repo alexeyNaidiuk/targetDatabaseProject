@@ -4,7 +4,6 @@ import requests
 
 from app.config import ZENNO_KEY
 
-
 URL = 'https://zennotasks.com/automation/api.php'
 REFERALS = {
     'supercat': 'https://referencemen.live/ktVmDV?c=0098xLek_pT9MBd059d7cb95430c53',
@@ -21,9 +20,15 @@ def get_link(target_pool_name: str, referal_to_project: str) -> str:
         utm_campaign = target_pool_name
     else:
         utm_campaign = f'{target_pool_name}_{referal_to_project}'
-
     url = f'{project_link}&utm_campaign={utm_campaign}'
     params = {'key': ZENNO_KEY, 'shurl': url}
-    response = requests.get(URL, params=params)
-    content = response.text
-    return content
+    response = None
+
+    while type(response) is not requests.Response:
+        try:
+            response = requests.get(URL, params=params)
+        except Exception as err:
+            logging.exception(err)
+        else:
+            content = response.text
+            return content
