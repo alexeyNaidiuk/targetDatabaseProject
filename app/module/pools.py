@@ -108,7 +108,7 @@ class Rub36Targets(FilePool):
 
 
 class WestProxy(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
+    path = pathlib.Path(PROXIES_FOLDER, 'west.txt')
 
     def info(self) -> dict:
         return {'type': 'http', 'amount': len(self)}
