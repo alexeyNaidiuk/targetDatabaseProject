@@ -107,13 +107,6 @@ class Rub36Targets(FilePool):
         return {'lang': 'russian', 'amount': len(self)}
 
 
-class WwmixProxy(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'wwmix.txt')
-
-    def info(self) -> dict:
-        return {'type': 'http', 'amount': len(self)}
-
-
 class WestProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'west_proxy.txt')
 
@@ -121,25 +114,11 @@ class WestProxy(FilePool):
         return {'type': 'http', 'amount': len(self)}
 
 
-class VladProxy(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'vlad.txt')
-
-    def info(self) -> dict:
-        return {'amount': len(self), 'type': 'vlad kypil'}
-
-
 class ParsedProxy(FilePool):
     path = pathlib.Path(PROXIES_FOLDER, 'parsed.txt')
 
     def info(self) -> dict:
         return {'amount': len(self), 'type': 'parsed'}
-
-
-class WebShareProxy(FilePool):
-    path = pathlib.Path(PROXIES_FOLDER, 'webshare.txt')
-
-    def info(self) -> dict:
-        return {'amount': len(self), 'type': 'webshare private'}
 
 
 factories = {
@@ -152,10 +131,7 @@ factories = {
         'rub36': Rub36Targets()
     },
     'proxies': {
-        'wwmix': WwmixProxy(),
         'west': WestProxy(),
         'parsed': ParsedProxy(),
-        'vlad': VladProxy(),
-        'webshare': VladProxy(),
     }
 }
